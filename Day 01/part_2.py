@@ -1,11 +1,11 @@
 test_result = 24000
 
 
-def main():
+def main(input_file):
     current_elf_calories = 0
     calories = []
 
-    with open("Day 01/input.txt") as f:
+    with open(input_file) as f:
         for line in f:
             if line.strip() == "":
                 calories.append(current_elf_calories)
@@ -16,7 +16,3 @@ def main():
     calories.sort()
 
     return sum(calories[-3:])
-
-
-if __name__ == "__main__":
-    print(main())

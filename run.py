@@ -1,5 +1,6 @@
 import os
 import importlib
+from pathlib import Path
 import timeit
 from glob import glob
 from argparse import ArgumentParser
@@ -45,25 +46,33 @@ def run_day_folder(folder: str, n: int = 1, force: bool = False):
     runtimes_info = ""
 
     for part in (1, 2):
-        for i in range(n):
-            start_time = timeit.default_timer()
+        input_files = [
+            [Path(folder) / "test_input.txt", True],
+            [Path(folder) / "input.txt", False],
+        ]
 
-            part_module = importlib.import_module(f"{folder}.part_{part}")
-            result = part_module.main()
+        for input_file in input_files:
+            for i in range(n):
+                start_time = timeit.default_timer()
 
-            runtime = timeit.default_timer() - start_time
+                part_module = importlib.import_module(f"{folder}.part_{part}")
+                result = part_module.main(input_file[0].as_posix())
 
-            # Safeguard to not repeat long operations
-            if n > 1 and (runtime < 10 or force):
-                runtimes.append(runtime)
-            else:
-                break
+                runtime = timeit.default_timer() - start_time
 
-        if runtimes:
-            runtime = sum(runtimes) / len(runtimes)
-            runtimes_info = f" on average according to {n} runs. Total runtime: {sum(runtimes):.4f} s"
+                # Safeguard to not repeat long operations
+                if n > 1 and (runtime < 10 or force):
+                    runtimes.append(runtime)
+                else:
+                    break
 
-        print(f"{folder} Part {part}: {result} : {runtime:.4f} s{runtimes_info}")
+            if runtimes:
+                runtime = sum(runtimes) / len(runtimes)
+                runtimes_info = f" on average according to {n} runs. Total runtime: {sum(runtimes):.4f} s"
+
+            print(
+                f"{folder} Part {part} {'Test' if input_file[1] else 'Real'}: {result}\t: {runtime:.4f} s{runtimes_info}"
+            )
 
 
 if __name__ == "__main__":
