@@ -1,6 +1,6 @@
 # Advent of Code 2022
 
-Hi and welcome to my solutions for [Advent of Code](https://adventofcode.com/) 2022! This year's solutions are written in Python, including some lightweight infrastructure around creating and runnning puzzle solutions. Enjoy! :)
+Hi and welcome to my solutions for [Advent of Code](https://adventofcode.com/) 2022! This year's solutions are written in Python, including some lightweight infrastructure around creating and running puzzle solutions. Enjoy! :)
 
 ## How to use this repo:
 
