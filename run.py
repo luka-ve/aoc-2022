@@ -31,11 +31,8 @@ def main():
     folders = glob(pathname=day_folder_pattern)
     folders.sort()
 
-    _folders = []
     if args.days:
-        _folders = [folder for folder in folders if folder[-2:] in args.days]
-        folder = _folders
-        _folders = None
+        folders = filter(lambda day: int(day[-2:]) in (args.days), folders)
 
     for day in folders:
         run_day_folder(day, args.n, args.f)
