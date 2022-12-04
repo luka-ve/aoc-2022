@@ -5,6 +5,8 @@ import timeit
 from glob import glob
 from argparse import ArgumentParser
 
+from colorama import Fore, Back, Style
+
 
 def main():
     parser = ArgumentParser()
@@ -67,9 +69,52 @@ def run_day_folder(folder: str, n: int = 1, force: bool = False):
                 runtime = sum(runtimes) / len(runtimes)
                 runtimes_info = f" on average according to {n} runs. Total runtime: {sum(runtimes):.4f} s"
 
-            print(
-                f"{folder} Part {part} {'Test' if input_file[1] else 'Real'}: {result}\t: {runtime:.4f} s{runtimes_info}"
+            print_day_result(
+                folder=folder,
+                part=part,
+                is_test=input_file[1],
+                result=result,
+                n_runs=n,
+                runtime=runtime,
+                runtimes=runtimes if runtimes else None,
+                module=part_module,
             )
+
+
+def print_day_result(
+    folder=None,
+    part=None,
+    is_test=None,
+    result=None,
+    n_runs=None,
+    runtime=None,
+    runtimes=None,
+    module=None,
+):
+    reset_terminal_colors()
+
+    if is_test:
+        test_successful = result == module.test_result
+
+        test_colors = Fore.GREEN if test_successful else Fore.RED
+        print("")
+        print(
+            f"""{test_colors}{test_colors}{folder}.{part} Test {'successful' if test_successful else 'failed'}{Fore.RESET}. Expected -> {module.test_result} : {result} <- Result"""
+        )
+    else:
+        runtimes_info = ""
+        if runtimes:
+            runtime = sum(runtimes) / len(runtimes)
+            runtimes_info = f" {n_runs} runs. Total runtime: {sum(runtimes):.4f} s"
+
+        print(f"{folder}.{part}: Average runtime: {runtime:.4f} s{runtimes_info}")
+        print(f"{Fore.BLACK}{Back.WHITE}{result}")
+
+    reset_terminal_colors()
+
+
+def reset_terminal_colors():
+    print(Style.RESET_ALL, end="")
 
 
 if __name__ == "__main__":
