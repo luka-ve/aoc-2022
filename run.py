@@ -51,19 +51,28 @@ def run_day_folder(folder: str, n: int = 1, force: bool = False):
         ]
 
         for input_file in input_files:
+            is_implemented = True
+
             for i in range(n):
                 start_time = timeit.default_timer()
 
                 part_module = importlib.import_module(f"{folder}.part_{part}")
-                result = part_module.main(input_file[0].as_posix())
+                try:
+                    result = part_module.main(input_file[0].as_posix())
 
-                runtime = timeit.default_timer() - start_time
+                    runtime = timeit.default_timer() - start_time
 
-                # Safeguard to not repeat long operations
-                if n > 1 and (runtime < 10 or force):
-                    runtimes.append(runtime)
-                else:
-                    break
+                    # Safeguard to not repeat long operations
+                    if n > 1 and (runtime < 10 or force):
+                        runtimes.append(runtime)
+                    else:
+                        break
+                except NotImplementedError:
+                    is_implemented = False
+                    continue
+
+            if not is_implemented:
+                continue
 
             if runtimes:
                 runtime = sum(runtimes) / len(runtimes)
@@ -108,7 +117,7 @@ def print_day_result(
             runtimes_info = f" {n_runs} runs. Total runtime: {sum(runtimes):.4f} s"
 
         print(f"{folder}.{part}: Average runtime: {runtime:.4f} s{runtimes_info}")
-        print(f"{Fore.BLACK}{Back.WHITE}{result}")
+        print(f"{Fore.BLACK}{Back.WHITE}{result}", end="")
 
     reset_terminal_colors()
 
