@@ -19,8 +19,6 @@ def main(input_file):
             axis=2,
         )
 
-        # print(f"Shape: {np_trees.shape}")
-
     for x in range(0, np_trees.shape[1]):
         for y in range(0, np_trees.shape[0]):
             current_tree = np_trees[x, y, 0]
@@ -54,6 +52,4 @@ def main(input_file):
 
             np_trees[x, y, 1] = tree_score
 
-    print((up, down, left, right))
-    print(np_trees[:, :, 1])
     return np.max(np_trees[:, :, 1])
